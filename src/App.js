@@ -1,19 +1,28 @@
-import { useEffect,useState } from "react";
+import { useEffect, useState } from "react";
 import "./App.css";
-import * as Postman from "./interns collection.postman_collection.json";
 
 function App() {
-  const [post,setPost]=useState([]);
-useEffect(()=>{
-const response=async()=>{
-  let resp =await(
-    await fetch(Postman)
-    
-   );setPost(resp)
-};
-},
-[]
-);
+  const [post, setPost] = useState([]);
+
+  useEffect(() => {
+    const getAll = () => {
+      fetch("./interns collection.postman_collection.json", {
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+      })
+        .then(function (response) {
+          console.log(response);
+          return response.json();
+        })
+        .then(function (myJson) {
+          console.log(myJson);
+          setPost(myJson);
+        });
+    };
+    getAll();
+  }, []);
 
   return (
     <div className="App">
@@ -24,18 +33,12 @@ const response=async()=>{
             <a>Home</a>
           </li>
           <li>
-          News
-            
-
-            <select className="news" >
-              <option>
-                All News
-              </option>
-              <option>
-                Olympia Tour
-              </option>
+            News
+            <select className="news">
+              <option>All News</option>
+              <option>Olympia Tour</option>
             </select>
-                 </li>
+          </li>
           <li>
             <a>Courses</a>
           </li>
@@ -55,7 +58,11 @@ const response=async()=>{
         <section id="latest">
           <h2>Latest News</h2>
           <ul>
-            <li>{post.map((item,i)=><p key={i}>{item.post}</p>)}</li>
+            <li>
+              {post.map((item, i) => (
+                <p key={i}>{item.name}</p>
+              ))}
+            </li>
           </ul>
         </section>
         <section id="about">
@@ -70,20 +77,35 @@ const response=async()=>{
           </p>
         </section>
       </main>
-      <footer><ul>
-<div>
-        <li><a>News</a></li>
-        <li><a>Tour</a></li>
-        <li><a>courses</a></li>
-        <li><a>E-books</a></li>
-        </div>
-        <div>
-        <li><a>terms</a></li>
-        <li><a>privacy</a></li>
-        <li><a>contact us</a></li>
-      </div>
-
-        </ul></footer>
+      <footer>
+        <ul>
+          <div>
+            <li>
+              <a>News</a>
+            </li>
+            <li>
+              <a>Tour</a>
+            </li>
+            <li>
+              <a>courses</a>
+            </li>
+            <li>
+              <a>E-books</a>
+            </li>
+          </div>
+          <div>
+            <li>
+              <a>terms</a>
+            </li>
+            <li>
+              <a>privacy</a>
+            </li>
+            <li>
+              <a>contact us</a>
+            </li>
+          </div>
+        </ul>
+      </footer>
     </div>
   );
 }
